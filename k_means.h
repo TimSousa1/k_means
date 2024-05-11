@@ -18,22 +18,23 @@
 int gen_data(int *arr, int n, int dim, int *range);
 int gen_cents(int *data, int n, int *m, int k,  int dim);
 
-int print_data(int *arr, int n, int dim);
+int print_data(int *arr, int *sets, int n, int dim);
 // colors is the color of each set
-int draw_data(int *arr, int n, int dim, Color *colors);
+int draw_data(int *arr, int *sets, int n, int dim, Color *colors);
 
 int print_cents(int *arr, int n, int dim);
 int draw_cents(int *arr, int n, int dim, Color *colors);
 
 // set points' sets
-int k_means(int *arr, int n, int *m, int k, int dim);
+int k_means(int *arr, int *sets, int n, int *m, int k, int dim);
 // get new centroids
-int k_means_adjust(int *arr, int n, int *m, int k, int dim);
+int k_means_adjust(int *arr, int *sets, int n, int *m, int k, int dim);
 
 // generate random 'n' colors
 int gen_colors(Color *colors, int n);
 
 
+#define T_K_MEANS_IMPL
 #ifdef T_K_MEANS_IMPL
 
 int gen_data(int *data, int n, int dim, int *range) {
@@ -44,8 +45,7 @@ int gen_data(int *data, int n, int dim, int *range) {
         for (int j = 0; j < dim; j++){
             data[j] = rand() % range[j];
         }
-        data[dim] = -1;
-        data += dim+1;
+        data += dim;
     }
 
     return 0;
@@ -56,7 +56,7 @@ int gen_cents(int *data, int n, int *m, int k,  int dim) {
     for (int i = 0; i < k; i++) {
         int ix = rand() % n;
         for (int j = 0; j < dim; j++) {
-            m[j] = data[j + ix*(dim+1)];
+            m[j] = data[j + ix*(dim)];
         }
         m += dim;
     }
@@ -94,7 +94,7 @@ int draw_cents(int *arr, int n, int dim, Color *colors) {
 }
 
 
-int print_data(int *arr, int n, int dim) {
+int print_data(int *arr, int *sets, int n, int dim) {
     printf("data:\n");
     for (int i = 0; i < n; i++) {
         printf("[");
@@ -102,27 +102,27 @@ int print_data(int *arr, int n, int dim) {
         for (int j = 0; j < dim-1; j++) {
             printf("%d, ", arr[j]);
         }
-        printf("%d | %d]\n", arr[dim-1], arr[dim]);
-        arr += dim+1;
+        printf("%d | %d]\n", arr[dim-1], sets[i]);
+        arr += dim;
     }
 
     return 0;
 }
 
 
-int draw_data(int *arr, int n, int dim, Color *colors) {
+int draw_data(int *arr, int *sets, int n, int dim, Color *colors) {
     if (dim != 2) return -1;
 
     for (int i = 0; i < n; i++) {
-        DrawCircle(arr[0], arr[1], D_RADIUS, colors[arr[dim]]);
-        arr += dim+1;
+        DrawCircle(arr[0], arr[1], D_RADIUS, colors[sets[i]]);
+        arr += dim;
     }
 
     return 0;
 }
 
 
-int k_means(int *arr, int n, int *m, int k, int dim) {
+int k_means(int *arr, int *sets, int n, int *m, int k, int dim) {
     for (int i = 0; i < n; i++) { // for each point
         int set_ix = -1;
         long min_d = LONG_MAX;
@@ -142,8 +142,8 @@ int k_means(int *arr, int n, int *m, int k, int dim) {
             m_t += dim;
         }
 
-        arr[dim] = set_ix;
-        arr += dim+1;
+        sets[i] = set_ix;
+        arr += dim;
     }
 
     return 0;
@@ -151,7 +151,7 @@ int k_means(int *arr, int n, int *m, int k, int dim) {
 
 
 // return value: bool -> if new centroids are the same
-int k_means_adjust(int *arr, int n, int *m, int k, int dim) {
+int k_means_adjust(int *arr, int *sets, int n, int *m, int k, int dim) {
     int *sum = (int *) calloc(k*dim, sizeof(*sum));
     int *sum_n = (int *) calloc(k, sizeof(*sum_n));
 
@@ -160,12 +160,12 @@ int k_means_adjust(int *arr, int n, int *m, int k, int dim) {
     int *sum_n_t = sum_n;
 
     for (int i = 0; i < n; i++) { // for each point
-        int ix = arr[dim];
+        int ix = sets[i];
         for (int j = 0; j < dim; j++) { // for each dim
             sum_t[ix*dim + j] += arr[j];
         }
         sum_n_t[ix]++;
-        arr += dim+1;
+        arr += dim;
     }
 
     /* for (int g = 0; g < k; g++) {

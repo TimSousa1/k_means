@@ -7,16 +7,16 @@
 #define T_K_MEANS_IMPL
 #include "k_means.h"
 
-#define WIDTH  120
-#define HEIGHT 120
+#define WIDTH  200
+#define HEIGHT 200
 #define FPS 60
 
-#define N 100
+#define N 1000
 #define DIM 2
-#define K 3
+#define K 7
 
 
-int reset(int *arr, int n, int *m, int k, int dim, int *range, Color *colors);
+int reset(int *arr, int *sets, int n, int *m, int k, int dim, int *range, Color *colors);
 
 int main(void) {
 
@@ -26,6 +26,7 @@ int main(void) {
 
     int data[(DIM+1) * N] = {0};
     int range[] = {WIDTH, HEIGHT};
+    int sets[N] = {-1};
 
     int centroids[K*DIM];
 
@@ -46,27 +47,27 @@ int main(void) {
     int iteration = 1;
 #endif
 
-    k_means(data, N, centroids, K, DIM);
+    k_means(data, sets, N, centroids, K, DIM);
 
     int eq = 0;
 
     while (!WindowShouldClose()) {
         if (iteration) {
-            k_means(data, N, centroids, K, DIM);
-//            print_data(data, N, DIM);
+            k_means(data, sets, N, centroids, K, DIM);
+//            print_data(data, sets, N, DIM);
         }
 
         BeginDrawing();
         ClearBackground(BLACK); 
 
         {
-            draw_data(data, N, DIM, colors);
+            draw_data(data, sets, N, DIM, colors);
             draw_cents(centroids, K, DIM, colors);
         }
 
         EndDrawing();
         if (iteration) {
-            eq = k_means_adjust(data, N, centroids, K, DIM);
+            eq = k_means_adjust(data, sets, N, centroids, K, DIM);
 //           print_cents(centroids, K, DIM);
         }
 
@@ -79,7 +80,7 @@ int main(void) {
         }
 #else
         if (eq) {
-            reset(data, N, centroids, K, DIM, range, colors);
+            reset(data, sets, N, centroids, K, DIM, range, colors);
         }
 #endif
 
@@ -90,10 +91,14 @@ int main(void) {
 }
 
 
-int reset(int *arr, int n, int *m, int k, int dim, int *range, Color *colors) {
+int reset(int *arr, int *sets, int n, int *m, int k, int dim, int *range, Color *colors) {
     gen_data(arr, n, dim, range);
     gen_cents(arr, n, m, k, dim);
     gen_colors(colors, k);
+
+    for (int i = 0; i < n; i++) {
+        sets[i] = -1;
+    }
 
     return 0;
 }
