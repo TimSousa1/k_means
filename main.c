@@ -1,28 +1,37 @@
 #include <raylib.h>
+#include <time.h>
+
+#define D_RADIUS 5
+#define K_RADIUS 5
 
 #define T_K_MEANS_IMPL
 #include "k_means.h"
-#include <limits.h>
 
-#define WIDTH  720
-#define HEIGHT 540
+#define WIDTH  200
+#define HEIGHT 200
+#define FPS 60
 
-#define N 500
+#define N 10000
 #define DIM 2
-#define K 6
+#define K 10
 
+
+int reset(int *arr, int n, int *m, int k, int dim, int *range, Color *colors);
 
 int main(void) {
 
     InitWindow(WIDTH, HEIGHT, "km");
-    SetTargetFPS(60);
+    SetTargetFPS(FPS);
     SetWindowMonitor(0);
 
     int data[(DIM+1) * N] = {0};
     int range[] = {WIDTH, HEIGHT};
+
     int centroids[K*DIM];
+
     Color colors[K];
 
+    srand(time(0));
     if (gen_data(data, N, DIM, range) < 0) return -1;
     print_data(data, N, DIM);
 
@@ -31,13 +40,15 @@ int main(void) {
 
     if (gen_colors(colors, K) < 0) return -1;
 
-    int iteration = 0;
+    int iteration = 1;
     k_means(data, N, centroids, K, DIM);
+
+    int eq = 0;
 
     while (!WindowShouldClose()) {
         if (iteration) {
             k_means(data, N, centroids, K, DIM);
-            print_data(data, N, DIM);
+//            print_data(data, N, DIM);
         }
 
         BeginDrawing();
@@ -50,14 +61,27 @@ int main(void) {
 
         EndDrawing();
         if (iteration) {
-            k_means_adjust(data, N, centroids, K, DIM);
-            print_cents(centroids, K, DIM);
+            eq = k_means_adjust(data, N, centroids, K, DIM);
+//           print_cents(centroids, K, DIM);
         }
 
-        if (IsKeyPressed(KEY_SPACE)) iteration = 1;
-        else iteration = 0;
+        // if (IsKeyPressed(KEY_SPACE)) iteration = 1;
+        // else iteration = 0;
+
+        if (eq) {
+            reset(data, N, centroids, K, DIM, range, colors);
+        }
 
     }
+
+    return 0;
+}
+
+
+int reset(int *arr, int n, int *m, int k, int dim, int *range, Color *colors) {
+    gen_data(arr, n, dim, range);
+    gen_cents(m, k, dim, range);
+    gen_colors(colors, k);
 
     return 0;
 }
