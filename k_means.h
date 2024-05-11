@@ -16,7 +16,7 @@
 // gen rand data with 'dim' dimensions. dim+1 is the set the point belongs to. ex: for dim = 2, n = 2  -> arr = [x, y, set, x, y, set]
 // range is an array with 'dim' points specifying the limit of random values. if range = [100, 200], x -- [0, 100] and y -- [0, 200]
 int gen_data(int *arr, int n, int dim, int *range);
-int gen_cents(int *arr, int n, int dim, int *range);
+int gen_cents(int *data, int n, int *m, int k,  int dim);
 
 int print_data(int *arr, int n, int dim);
 // colors is the color of each set
@@ -36,44 +36,45 @@ int gen_colors(Color *colors, int n);
 
 #ifdef T_K_MEANS_IMPL
 
-int gen_data(int *arr, int n, int dim, int *range) {
-    if (!arr) return -1;
+int gen_data(int *data, int n, int dim, int *range) {
+    if (!data) return -1;
     if (!range) return -1;
 
     for (int i = 0; i < n; i++){
         for (int j = 0; j < dim; j++){
-            arr[j] = rand() % range[j];
+            data[j] = rand() % range[j];
         }
-        arr[dim] = -1;
-        arr += dim+1;
+        data[dim] = -1;
+        data += dim+1;
     }
 
     return 0;
 }
 
 
-int gen_cents(int *arr, int n, int dim, int *range) {
-    for (int i = 0; i < n; i++) {
+int gen_cents(int *data, int n, int *m, int k,  int dim) {
+    for (int i = 0; i < k; i++) {
+        int ix = rand() % n;
         for (int j = 0; j < dim; j++) {
-            arr[j] = rand() % range[j];
+            m[j] = data[j + ix*(dim+1)];
         }
-        arr += dim;
+        m += dim;
     }
 
     return 0;
 }
 
 
-int print_cents(int *arr, int n, int dim) {
-//    printf("centroids:\n");
-    for (int i = 0; i < n; i++) {
-//        printf("[");
+int print_cents(int *m, int k, int dim) {
+    printf("centroids:\n");
+    for (int i = 0; i < k; i++) {
+        printf("[");
 
         for (int j = 0; j < dim-1; j++) {
-//            printf("%d, ", arr[j]);
+            printf("%d, ", m[j]);
         }
-//        printf("%d]\n", arr[dim-1]);
-        arr += dim;
+        printf("%d]\n", m[dim-1]);
+        m += dim;
     }
 
     return 0;
@@ -94,14 +95,14 @@ int draw_cents(int *arr, int n, int dim, Color *colors) {
 
 
 int print_data(int *arr, int n, int dim) {
-//    printf("data:\n");
+    printf("data:\n");
     for (int i = 0; i < n; i++) {
-//        printf("[");
+        printf("[");
 
         for (int j = 0; j < dim-1; j++) {
-//            printf("%d, ", arr[j]);
+            printf("%d, ", arr[j]);
         }
-//        printf("%d | %d]\n", arr[dim-1], arr[dim]);
+        printf("%d | %d]\n", arr[dim-1], arr[dim]);
         arr += dim+1;
     }
 
@@ -176,6 +177,7 @@ int k_means_adjust(int *arr, int n, int *m, int k, int dim) {
     int eq = 1;
     for (int g = 0; g < k; g++) { // for each centroid
         for (int j = 0; j < dim; j++) { // for each dim
+            if (sum_n_t[g] == 0) continue;
             int mid = sum_t[j] / sum_n_t[g];
             if (mid != m[j] && eq) eq = 0;
             m[j] = mid;
