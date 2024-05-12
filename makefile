@@ -9,6 +9,10 @@ ifdef DEBUG
 	CFLAGS = -ggdb -D DEBUG
 endif
 
+ifdef INTERACTIVE
+	CFLAGS += -D INTERACTIVE
+endif
+
 CFLAGS += -Wall -Wextra
 
 SRC := $(shell find . -name '*.c')

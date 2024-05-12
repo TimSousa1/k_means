@@ -78,7 +78,7 @@ int main(void) {
         else iteration = 0;
 
         if (IsKeyPressed(KEY_W)) {
-            reset(data, N, centroids, K, DIM, range, colors);
+            reset(data, sets, N, centroids, K, DIM, range, colors);
         }
 #else
         if (eq) {
