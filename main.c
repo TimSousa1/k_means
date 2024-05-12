@@ -7,6 +7,7 @@
 typedef unsigned char size_d_tim_;
 
 #define T_K_MEANS_IMPL
+#define T_K_MEANS_RAYLIB_VISUALIZATION
 #include "k_means.h"
 
 #define WIDTH  200
