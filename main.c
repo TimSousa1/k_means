@@ -7,7 +7,6 @@
 typedef unsigned char size_d_tim_;
 
 #define T_K_MEANS_IMPL
-#define T_K_MEANS_RAYLIB_VISUALIZATION
 #include "k_means.h"
 
 #define WIDTH  200
@@ -19,6 +18,11 @@ typedef unsigned char size_d_tim_;
 #define K 7
 
 
+// colors is the color of each set
+int draw_data(size_d_tim_ *arr, int *sets, int n, int dim, Color *colors);
+int draw_cents(size_d_tim_ *arr, int n, int dim, Color *colors);
+// generate random 'n' colors
+int gen_colors(Color *colors, int n);
 int reset(u_char *arr, int *sets, int n, u_char *m, int k, int dim, u_char *range, Color *colors);
 
 int main(void) {
@@ -101,6 +105,44 @@ int reset(u_char *arr, int *sets, int n, u_char *m, int k, int dim, u_char *rang
 
     for (int i = 0; i < n; i++) {
         sets[i] = -1;
+    }
+
+    return 0;
+}
+
+
+int draw_data(size_d_tim_ *arr, int *sets, int n, int dim, Color *colors) {
+    if (dim != 2) return -1;
+
+    for (int i = 0; i < n; i++) {
+        DrawCircle(arr[0], arr[1], D_RADIUS, colors[sets[i]]);
+        arr += dim;
+    }
+
+    return 0;
+}
+
+
+int draw_cents(size_d_tim_ *arr, int n, int dim, Color *colors) {
+    if (dim != 2) return -1;
+
+    for (int i = 0; i < n; i++) {
+        DrawCircle(arr[0], arr[1], K_RADIUS, colors[i]);
+        arr += dim;
+    }
+
+    return 0;
+}
+
+
+int gen_colors(Color *colors, int n) {
+    if (!colors) return -1;
+
+    for (int i = 0; i < n; i++) {
+        colors[i].r = rand() % 200 + 55;
+        colors[i].g = rand() % 200 + 55;
+        colors[i].b = rand() % 200 + 55;
+        colors[i].a = 255;
     }
 
     return 0;
