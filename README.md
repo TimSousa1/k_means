@@ -25,7 +25,7 @@ The other array, **m** contains the current point each centroid is at and contai
 You needn't worry about the details.
 All you **DO NEED TO KNOW IS**:
  - **data** must be of size **_n_** * **_dim_** (number of points * number of dimensions of each point)
- - **sets** must be of size **_n_** (number of points) AND must be of type **_int_**
+ - **sets** must be of size **_n_** (number of points) AND must be of type **_int_** (might change soon)
  - **m** must be of size **_k_** * **_dim_** (number of sets * number of dimensions of each point)
 
-Your sets array has to be of _int_ type (will change soon).
+Check **_main.c_** out for a clear and simple example of this header's usage.
