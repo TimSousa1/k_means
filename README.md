@@ -28,4 +28,23 @@ All you **DO NEED TO KNOW IS**:
  - **sets** must be of size **_n_** (number of points) AND must be of type **_int_** (might change soon)
  - **m** must be of size **_k_** * **_dim_** (number of sets * number of dimensions of each point)
 
+### Examples:
+
 Check **_main.c_** out for a clear and simple example of this header's usage.
+Compile it with 
+```
+make
+```
+and (optionally) specify INTERACTIVE=1 to step through each iteration manually.
+```
+make INTERACTIVE=1
+```
+
+#### main.c dependencies
+**_main.c_** depends on raylib to work. Since the lib isn't included in the project, you'll have to provide your own.
+Raylib can be easily installed on Arch linux with 
+```
+sudo pacman -S raylib
+```
+
+If for some reason you can't get raylib working, **_main.c_** still serves as a great example.
