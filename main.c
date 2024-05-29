@@ -32,11 +32,10 @@ int main(void) {
     SetWindowMonitor(0);
 
     u_char data[N*DIM] = {0};
-    u_char range[] = {WIDTH, HEIGHT};
     int sets[N] = {-1};
-
     u_char centroids[K*DIM];
 
+    u_char range[] = {WIDTH, HEIGHT};
     Color colors[K];
 
     srand(time(0));
