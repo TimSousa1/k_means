@@ -30,6 +30,8 @@ All you **DO NEED TO KNOW IS**:
 
 ### Examples:
 
+#### main.c
+
 Check **_main.c_** out for a clear and simple example of this header's usage.
 Compile it with 
 ```
@@ -40,7 +42,7 @@ and (optionally) specify INTERACTIVE=1 to step through each iteration manually.
 make INTERACTIVE=1
 ```
 
-#### main.c dependencies
+##### main.c dependencies:
 **_main.c_** depends on raylib to work. Since the lib isn't included in the project, you'll have to provide your own.
 Raylib can be easily installed on Arch linux with 
 ```
@@ -48,3 +50,7 @@ sudo pacman -S raylib
 ```
 
 If for some reason you can't get raylib working, **_main.c_** still serves as a great example.
+
+#### [image palette](https://github.com/Timsousa1/image_palette)
+A simple demonstration of a practical use-case for the k means algorithm.
+It finds the best k colors to reconstruct the image with and creates a copy using only those k colors.
