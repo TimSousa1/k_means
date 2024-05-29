@@ -31,7 +31,7 @@ int main(void) {
     SetTargetFPS(FPS);
     SetWindowMonitor(0);
 
-    u_char data[(DIM+1) * N] = {0};
+    u_char data[N*DIM] = {0};
     u_char range[] = {WIDTH, HEIGHT};
     int sets[N] = {-1};
 
