@@ -4,7 +4,7 @@
 // #define D_RADIUS 6
 // #define K_RADIUS 5
 #define MY_T_K_MEANS_SIZE_IMPL
-typedef unsigned char size_d_tim_;
+typedef int size_d_tim_;
 
 #define T_K_MEANS_IMPL
 #include "k_means.h"
@@ -23,7 +23,7 @@ int draw_data(size_d_tim_ *arr, int *sets, int n, int dim, Color *colors);
 int draw_cents(size_d_tim_ *arr, int n, int dim, Color *colors);
 // generate random 'n' colors
 int gen_colors(Color *colors, int n);
-int reset(u_char *arr, int *sets, int n, u_char *m, int k, int dim, u_char *range, Color *colors);
+int reset(size_d_tim_ *arr, int *sets, int n, size_d_tim_ *m, int k, int dim, size_d_tim_ *range, Color *colors);
 
 int main(void) {
 
@@ -31,11 +31,11 @@ int main(void) {
     SetTargetFPS(FPS);
     SetWindowMonitor(0);
 
-    u_char data[N*DIM] = {0};
+    size_d_tim_ data[N*DIM] = {0};
     int sets[N] = {-1};
-    u_char centroids[K*DIM];
+    size_d_tim_ centroids[K*DIM];
 
-    u_char range[] = {WIDTH, HEIGHT};
+    size_d_tim_ range[] = {WIDTH, HEIGHT};
     Color colors[K];
 
     srand(time(0));
@@ -97,7 +97,7 @@ int main(void) {
 }
 
 
-int reset(u_char *arr, int *sets, int n, u_char *m, int k, int dim, u_char *range, Color *colors) {
+int reset(size_d_tim_ *arr, int *sets, int n, size_d_tim_ *m, int k, int dim, size_d_tim_ *range, Color *colors) {
     gen_data(arr, n, dim, range);
     gen_cents(arr, n, m, k, dim);
     gen_colors(colors, k);
