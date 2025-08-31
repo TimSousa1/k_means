@@ -39,10 +39,10 @@ Compile it with
 ```
 make
 ```
-and (optionally) specify INTERACTIVE=1 to step through each iteration manually.
-```
-make INTERACTIVE=1
-```
+Pressing the `ENTER` key toggles auto stepping.
+If auto stepping is on, then pressing `SPACE` steps through each iteration
+manually. \
+Pressing `W` resets the current simulation and generates a new dataset.
 
 ##### main.c dependencies:
 `main.c` depends on raylib to work. Since the lib isn't included in the project, you'll have to provide your own.

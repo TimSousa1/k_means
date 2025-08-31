@@ -1,32 +1,16 @@
-SHELL = /bin/sh
-.SUFFIXES:
-.SUFFIXES: .c .h .o
+CFLAGS = -O3 -Wall -Wextra -pedantic
+#CFLAGS = -g -O0 -D DEBUG -Wall -Wextra -pedantic
 
-CC := gcc
-CFLAGS = -O3
+SRC = main.c
+INC = k_means.h
+LDLIBS = -lraylib
+OUT = km
 
-ifdef DEBUG
-	CFLAGS = -ggdb -D DEBUG
-endif
+all: $(OUT)
 
-ifdef INTERACTIVE
-	CFLAGS += -D INTERACTIVE
-endif
+$(OUT): $(SRC)
+	$(CC) $(SRC) -o $@ $(CFLAGS) $(LDLIBS)
 
-CFLAGS += -Wall -Wextra
-
-SRC := $(shell find . -name '*.c')
-OBJ := $(SRC:%.c=%.o)
-DEPS := $(shell find . -name '*.h')
-LIBS := $(shell pkg-config --libs raylib)
-OUT_NAME := km
-
-%.o : %.c $(DEPS)
-	$(CC) -c $< -o $@ $(CFLAGS) $(LIBS)
-
-$(OUT_NAME) : $(OBJ)
-	$(CC) $^ -o $@ $(CFLAGS) $(LIBS)
-
-.PHONY: clean
+.PHONY: clean all
 clean:
-	rm -r *.o $(OUT_NAME)
+	rm -rf $(OUT)

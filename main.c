@@ -33,10 +33,10 @@ int main(void) {
 
     size_d_tim_ data[N*DIM] = {0};
     int sets[N] = {-1};
-    size_d_tim_ centroids[K*DIM];
+    size_d_tim_ centroids[K*DIM] = {0};
 
     size_d_tim_ range[] = {WIDTH, HEIGHT};
-    Color colors[K];
+    Color colors[K] = {0};
 
     srand(time(0));
     if (gen_data(data, N, DIM, range) < 0) return -1;
@@ -47,17 +47,17 @@ int main(void) {
 
     if (gen_colors(colors, K) < 0) return -1;
 
-#ifdef INTERACTIVE
-    int iteration = 0;
-#else
     int iteration = 1;
-#endif
 
     k_means(data, sets, N, centroids, K, DIM);
 
     int eq = 0;
+    int manual_stepping = 0;
 
     while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_ENTER)) {
+            manual_stepping = !manual_stepping;
+        }
         if (iteration) {
             k_means(data, sets, N, centroids, K, DIM);
 //            print_data(data, sets, N, DIM);
@@ -77,20 +77,18 @@ int main(void) {
 //           print_cents(centroids, K, DIM);
         }
 
-#ifdef INTERACTIVE
-        if (IsKeyPressed(KEY_SPACE)) iteration = 1;
-        else iteration = 0;
+        if (manual_stepping) {
+            if (IsKeyDown(KEY_SPACE)) iteration = 1;
+            else iteration = 0;
 
-        if (IsKeyPressed(KEY_W)) {
-            reset(data, sets, N, centroids, K, DIM, range, colors);
-        }
-#else
+            if (IsKeyPressed(KEY_W)) {
+                reset(data, sets, N, centroids, K, DIM, range, colors);
+            }
+        } else iteration = 1;
+
         if (eq) {
             reset(data, sets, N, centroids, K, DIM, range, colors);
         }
-#endif
-
-
     }
 
     return 0;
