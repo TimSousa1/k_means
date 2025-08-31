@@ -2,12 +2,11 @@
 // define T_K_MEANS_IMPL to include all implementations
 
 #ifndef T_K_MEANS_H
+#define T_K_MEANS_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <limits.h>
-
-#include <raylib.h>
 
 #ifndef D_RADIUS 
 #define D_RADIUS 3
